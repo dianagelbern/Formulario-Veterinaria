@@ -1,15 +1,41 @@
 import { useState } from "react";
 
-const Formulario = () => {
-    const [nombre, setNombre] = useState("");
-    const [propietario, setPropietario] = useState("");
-    const [email, setEmail] = useState("");
-    const [fecha, setFecha] = useState("");
-    const [sintomas, setSintomas] = useState("");
+const Formulario = ({pacientes, setPacientes} : {pacientes: any, setPacientes: any}) => {
+  const [nombre, setNombre] = useState("");
+  const [propietario, setPropietario] = useState("");
+  const [email, setEmail] = useState("");
+  const [fecha, setFecha] = useState("");
+  const [sintomas, setSintomas] = useState("");
 
-    const handleSubmit = () => {
-        console.log("Enviando formulario")
+  const [error, setError] = useState(false);
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    if ([nombre, propietario, email, fecha, sintomas].includes("")) {
+      console.log("Hay al menos un campo vació");
+      setError(true);
+    } 
+    setError(false);
+
+    const objetoPaciente = {
+        nombre, 
+        propietario, 
+        email, 
+        fecha, 
+        sintomas
     }
+
+
+
+    setPacientes([...pacientes, objetoPaciente]);
+
+    setNombre('');
+    setPropietario('');
+    setEmail('');
+    setFecha('');
+    setSintomas('');
+  };
+
   return (
     <div className="md:w-1/2 lg:w-2/5">
       <h2 className="font-black text-3xl text-center">Seguimiento Pacientes</h2>
@@ -17,7 +43,15 @@ const Formulario = () => {
         Añade Pacientes y{" "}
         <span className="text-indigo-600 font-bold">Administralos</span>
       </p>
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg py-10 px-5 mb-10 m-5">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white shadow-md rounded-lg py-10 px-5 mb-10 m-5"
+      >
+        {error && (
+          <div className="text-center mb-5">
+            <p className="text-red-600 font-black uppercase">Todos los campos son obligatorios</p>
+          </div>
+        )}
         <div className="mb-5">
           <label htmlFor="mascota" className="block text-gray-700 uppercase">
             Nombre Mascota
