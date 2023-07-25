@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Error } from "./Error";
 import { Paciente } from "../interfaces/Paciente";
 
 const Formulario: React.FC<{
   pacientes: Paciente[];
   setPacientes: Function;
+  paciente: any;
+  setPaciente: Function
 }> = (props) => {
   const [nombre, setNombre] = useState("");
   const [propietario, setPropietario] = useState("");
@@ -13,10 +15,21 @@ const Formulario: React.FC<{
   const [sintomas, setSintomas] = useState("");
   const [error, setError] = useState(false);
 
+  useEffect(() => {
+    if(Object.keys(props.paciente).length > 0 ){
+      setNombre(props.paciente.nombre)
+      setPropietario(props.paciente.propietario)
+      setEmail(props.paciente.email)
+      setFecha(props.paciente.fecha)
+      setSintomas(props.paciente.sintomas)
+    }
+  }, [props.paciente])
+
+  
+
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if ([nombre, propietario, email, fecha, sintomas].includes("")) {
-      console.log("Hay al menos un campo vacío");
       setError(true);
       return;
     }
@@ -25,7 +38,7 @@ const Formulario: React.FC<{
 
     
     const objetoPaciente = {
-      id: generateId,
+      id: '',
       nombre,
       propietario,
       email,
@@ -33,7 +46,19 @@ const Formulario: React.FC<{
       sintomas,
     };
 
-    props.setPacientes([...props.pacientes, objetoPaciente]);
+    if(props.paciente.id){
+      //Editando
+      objetoPaciente.id = props.paciente.id;
+      const pacientesActualizados = props.pacientes.map( pacienteState => pacienteState.id == props.paciente.id ? objetoPaciente : pacienteState)
+      props.setPacientes(pacientesActualizados);
+      props.setPaciente({});
+    }else{
+      //Nuevo registro
+      objetoPaciente.id = generateId;
+      props.setPacientes([...props.pacientes, objetoPaciente]);
+    }
+
+    
     setNombre("");
     setPropietario("");
     setEmail("");
@@ -122,7 +147,7 @@ const Formulario: React.FC<{
         <input
           type="submit"
           className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-700 cursor-pointer transition-all"
-          value="Agregar Paciente"
+          value={props.paciente.id ? "Editar Paciente" : "Agregar Paciente"}
         />
       </form>
     </div>
