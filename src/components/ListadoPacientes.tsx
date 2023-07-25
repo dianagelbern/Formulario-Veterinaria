@@ -1,6 +1,6 @@
 import { Paciente, Paciente as Pacientes } from "../interfaces/Paciente";
 import CardPaciente from "./CardPaciente";
-const ListadoPacientes: React.FC<{ pacientes: Pacientes[], setPaciente: Function }> = (props) => {
+const ListadoPacientes: React.FC<{ pacientes: Pacientes[], setPaciente: Function, eliminarPaciente: Function }> = (props) => {
   
   
   return props.pacientes && props.pacientes.length ? (
@@ -14,7 +14,7 @@ const ListadoPacientes: React.FC<{ pacientes: Pacientes[], setPaciente: Function
           <span className="text-indigo-600 font-bold">Pacientes y Citas</span>
         </p>
           {props.pacientes?.map((paciente: Paciente) => (
-            <CardPaciente key={paciente.id} paciente={paciente} setPaciente={props.setPaciente}/>
+            <CardPaciente key={paciente.id} paciente={paciente} setPaciente={props.setPaciente} eliminarPaciente={props.eliminarPaciente}/>
           ))}
       </div>
     </>
