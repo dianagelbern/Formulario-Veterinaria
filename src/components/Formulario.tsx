@@ -1,39 +1,44 @@
 import { useState } from "react";
+import { Error } from "./Error";
+import { Paciente } from "../interfaces/Paciente";
 
-const Formulario = ({pacientes, setPacientes} : {pacientes: any, setPacientes: any}) => {
+const Formulario: React.FC<{
+  pacientes: Paciente[];
+  setPacientes: Function;
+}> = (props) => {
   const [nombre, setNombre] = useState("");
   const [propietario, setPropietario] = useState("");
   const [email, setEmail] = useState("");
   const [fecha, setFecha] = useState("");
   const [sintomas, setSintomas] = useState("");
-
   const [error, setError] = useState(false);
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
     if ([nombre, propietario, email, fecha, sintomas].includes("")) {
-      console.log("Hay al menos un campo vació");
+      console.log("Hay al menos un campo vacío");
       setError(true);
-    } 
-    setError(false);
-
-    const objetoPaciente = {
-        nombre, 
-        propietario, 
-        email, 
-        fecha, 
-        sintomas
+      return;
     }
+    setError(false);
+    let generateId = Math.random().toString(16).slice(2);
 
+    
+    const objetoPaciente = {
+      id: generateId,
+      nombre,
+      propietario,
+      email,
+      fecha,
+      sintomas,
+    };
 
-
-    setPacientes([...pacientes, objetoPaciente]);
-
-    setNombre('');
-    setPropietario('');
-    setEmail('');
-    setFecha('');
-    setSintomas('');
+    props.setPacientes([...props.pacientes, objetoPaciente]);
+    setNombre("");
+    setPropietario("");
+    setEmail("");
+    setFecha("");
+    setSintomas("");
   };
 
   return (
@@ -47,11 +52,7 @@ const Formulario = ({pacientes, setPacientes} : {pacientes: any, setPacientes: a
         onSubmit={handleSubmit}
         className="bg-white shadow-md rounded-lg py-10 px-5 mb-10 m-5"
       >
-        {error && (
-          <div className="text-center mb-5">
-            <p className="text-red-600 font-black uppercase">Todos los campos son obligatorios</p>
-          </div>
-        )}
+        {error && <Error mensaje={"Todos los campos son obligatorios"} />}
         <div className="mb-5">
           <label htmlFor="mascota" className="block text-gray-700 uppercase">
             Nombre Mascota
