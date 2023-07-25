@@ -16,7 +16,7 @@ const Formulario: React.FC<{
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if(Object.keys(props.paciente).length > 0 ){
+    if(Object.entries(props.paciente).length > 0 ){
       setNombre(props.paciente.nombre)
       setPropietario(props.paciente.propietario)
       setEmail(props.paciente.email)
