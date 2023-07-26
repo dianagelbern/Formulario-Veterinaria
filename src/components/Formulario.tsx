@@ -49,13 +49,13 @@ const Formulario: React.FC<{
     if(props.paciente.id){
       //Editando
       objetoPaciente.id = props.paciente.id;
-      const pacientesActualizados = props.pacientes.map( pacienteState => pacienteState.id == props.paciente.id ? objetoPaciente : pacienteState)
+      const pacientesActualizados = props.pacientes?.map( pacienteState => pacienteState.id == props.paciente.id ? objetoPaciente : pacienteState)
       props.setPacientes(pacientesActualizados);
       props.setPaciente({});
     }else{
       //Nuevo registro
       objetoPaciente.id = generateId;
-      props.setPacientes([...props.pacientes, objetoPaciente]);
+      props.setPacientes([...Object.keys(props.pacientes), objetoPaciente]);
     }
 
     

@@ -6,12 +6,21 @@ import { Paciente } from "./interfaces/Paciente";
 
 
 function App() {
-  const pacientesLS = JSON.parse(localStorage.getItem('pacientes') ?? '{}') ?? [];
-  const [pacientes, setPacientes] = useState<Paciente[]>(pacientesLS);
+  //const pacientesLS = JSON.parse(localStorage.getItem('pacientes') ?? '{}');
+  const initPacientreState: Paciente[]  = [];
+  const [pacientes, setPacientes] = useState<Paciente[]>(initPacientreState);
   const [paciente, setPaciente ] = useState({});
+
+  useEffect(() => {
+    const carritoLS = JSON.parse(localStorage.getItem('pacientes') ?? '{}')
+    if (carritoLS) {
+      setPacientes(carritoLS)
+    }
+  }, [])
 
 
   useEffect(() => {
+    if(pacientes !== initPacientreState)
     localStorage.setItem('pacientes', JSON.stringify(pacientes));
   }, [pacientes]);
 
